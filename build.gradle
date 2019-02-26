@@ -1,0 +1,36 @@
+plugins {
+  id "com.diffplug.gradle.spotless" version "3.18.0" apply false
+}
+
+subprojects { 
+
+  repositories {
+    mavenCentral()
+  }
+
+  apply plugin: 'java'
+  apply plugin: 'java-library'
+  apply plugin: 'com.diffplug.gradle.spotless'
+
+  spotless {
+    java {
+      googleJavaFormat()
+    }
+    format 'misc', {
+      target '**/*.gradle', '**/*.md', '**/.gitignore'
+
+      trimTrailingWhitespace()
+      indentWithSpaces(2)
+      endWithNewline()
+    }
+  }
+
+  dependencies {
+    compile 'com.google.guava:guava:26.0-jre'
+
+    testCompile 'com.google.truth.extensions:truth-java8-extension:0.39'
+    testCompile 'com.google.truth:truth:0.42'
+    testCompile 'junit:junit:4.12'
+  }
+}
+

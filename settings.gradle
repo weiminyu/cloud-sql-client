@@ -1,0 +1,10 @@
+rootProject.name = 'cloud-sql-client'
+
+def subprojects = file("subprojects").list()
+
+subprojects.each { 
+  include it 
+  project(":${it}").projectDir = file("subprojects/${it}")
+  project(":${it}").buildFileName = "${it}.gradle"
+}
+

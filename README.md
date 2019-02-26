@@ -1,1 +1,1 @@
-# cloud-sql-client
+A playground for experiments with CloudSQL and other ideas.
