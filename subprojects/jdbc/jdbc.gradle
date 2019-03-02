@@ -1,0 +1,35 @@
+dependencies {
+    // Connection pools: HikariCP and Tomcat JDBC
+    compile 'com.zaxxer:HikariCP:3.3.1'
+    compile 'org.apache.tomcat:tomcat-jdbc:9.0.16'
+    compile 'org.apache.tomcat:tomcat-juli:9.0.16'
+
+    // JDBC drivers
+    runtimeOnly 'mysql:mysql-connector-java:8.0.11'
+    runtimeOnly 'org.postgresql:postgresql:42.2.5'
+
+    // CloudSQL socket factories
+    runtimeOnly 'com.google.cloud.sql:postgres-socket-factory:1.0.12'
+    runtimeOnly 'com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.0.12'
+
+    testCompile 'pl.pragmatists:JUnitParams:1.1.1'
+}
+
+def INTEGRATION_TESTS = [ "**/*IntegrationTest.*" ]
+def PROXY_INTEGRATION_TESTS = [ "**/ProxyIntegrationTest.*" ]
+
+test {
+    exclude INTEGRATION_TESTS
+}
+
+// Non-hermetic tests that require GCP access.
+task integration_test(type: Test) {
+    include INTEGRATION_TESTS
+    exclude PROXY_INTEGRATION_TESTS
+}
+
+// Non-hermetic tests that require GCP access as well as CloudSQL proxy
+// started before hand.
+task proxy_integration_test(type: Test) {
+    include PROXY_INTEGRATION_TESTS
+}
