@@ -1,0 +1,19 @@
+mysql:
+  userName: USER-NAME
+  password: PASSWORD
+  dbName: DATABASE-NAME
+  port: CLOUDSQL-PROXY-PORT
+  sqlInstanceName: CLOUDSQL-INSTANCE-NAME
+  versionQuery: show variables like 'version'
+  resultColumnIndex: 2
+  resultPrefix: 5.7.14-google-log
+psql:
+  userName: USER-NAME
+  password: PASSWORD
+  dbName: DATABASE-NAME
+  port: CLOUDSQL-PROXY-PORT
+  sqlInstanceName: CLOUDSQL-INSTANCE-NAME
+  versionQuery: select version()
+  resultColumnIndex: 1
+  resultPrefix: PostgreSQL 9.6.10
+

@@ -8,7 +8,7 @@ This project provides CloudSQL JDBC support based on two popular connection
 pools: [HikariCP](https://github.com/brettwooldridge/HikariCP) and
 [Tomcat JDBC](https://tomcat.apache.org/tomcat-9.0-doc/jdbc-pool.html).
 
-It targets to use cases:
+It targets two use cases:
 
 *   connections using CloudSQL's secure socket factories.
 *   connections to a local CloudSQL proxy on a secure host.

@@ -12,6 +12,7 @@ dependencies {
     runtimeOnly 'com.google.cloud.sql:postgres-socket-factory:1.0.12'
     runtimeOnly 'com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.0.12'
 
+    testCompile 'org.yaml:snakeyaml:1.17'
     testCompile 'pl.pragmatists:JUnitParams:1.1.1'
 }
 
