@@ -28,7 +28,7 @@ public final class HikariDataSources {
         userName, password, createProxyJdbcUrl(dbType, dbName, port), dbType.proxyProperties());
   }
 
-  private static DataSource createDataSource(
+  public static DataSource createDataSource(
       String userName, String password, String jdbcUrl, Map<String, String> connectionProperties) {
     HikariConfig config = new HikariConfig();
     config.setJdbcUrl(jdbcUrl);
