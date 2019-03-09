@@ -16,7 +16,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @RunWith(JUnit4.class)
 public class ConnectionPoolTest {
 
-  @ClassRule public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer();
+  @ClassRule
+  public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:9.6");
 
   private static DataSource dataSource;
 
@@ -36,7 +37,7 @@ public class ConnectionPoolTest {
     try (Connection conn = dataSource.getConnection()) {
       ResultSet resultSet = conn.createStatement().executeQuery("select version()");
       assertThat(resultSet.next()).isTrue();
-      assertThat(resultSet.getString(1)).startsWith("PostgreSQL 9.6.12");
+      assertThat(resultSet.getString(1)).startsWith("PostgreSQL 9.6");
       assertThat(resultSet.next()).isFalse();
     }
   }
