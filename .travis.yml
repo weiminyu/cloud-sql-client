@@ -3,6 +3,9 @@ install: true
 jdk:
   - openjdk8
 
+services:
+  - docker
+
 # Caching options suggested by a random article.
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
