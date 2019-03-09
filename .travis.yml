@@ -1,1 +1,28 @@
 language: java
+install: true
+jdk:
+  - openjdk8
+
+# Caching options suggested by a random article.
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -f $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+env:
+  # Disable fancy status information (looks bad on travis and exceeds logfile
+  # quota)
+  TERM=dumb
+
+# Specialize gradle build to use an up-to-date gradle and the /gradle
+# directory.
+# The "travis_wait 45" lets our build spend up to 45 minutes without writing
+# output, instead of the default 10.
+# See notes on the CREDZ and REPORT_GCS_BUCKET environment variable in the
+# comments at the top of the file.
+script: cd gradle && chmod 755 ./gradlew && travis_wait 45 ./gradlew build
+

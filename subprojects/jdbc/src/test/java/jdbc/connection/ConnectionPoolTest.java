@@ -16,9 +16,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @RunWith(JUnit4.class)
 public class ConnectionPoolTest {
 
-  @ClassRule
-  public static PostgreSQLContainer postgreSQLContainer =
-      new PostgreSQLContainer();
+  @ClassRule public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer();
 
   private static DataSource dataSource;
 
