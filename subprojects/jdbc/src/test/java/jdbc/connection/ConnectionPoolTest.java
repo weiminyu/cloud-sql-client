@@ -52,7 +52,7 @@ public class ConnectionPoolTest {
   @SuppressWarnings("unused")
   private Object[] parametersForConnect_emptyDb() {
     return new Object[] {
-      new Object[] {DataSourceFactory.MYSQL, "show variables like 'version'", 2, ""},
+      new Object[] {DataSourceFactory.MYSQL, "show variables like 'version'", 2, "5.7.25"},
       new Object[] {DataSourceFactory.PSQL, "select version()", 1, "PostgreSQL 9.6.12"}
     };
   }
