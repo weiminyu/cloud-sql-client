@@ -28,9 +28,9 @@ public class SchemaExportsTest {
   @Rule
   public final PostgreSQLContainer<?> postgreSQLContainer =
       new PostgreSQLContainer<>("postgres:9.6.12")
-          .withDatabaseName("nomulus")
-          .withPassword("domain-registry")
-          .withUsername("postgres");
+          .withDatabaseName("anything-goes")
+          .withUsername("whomever")
+          .withPassword("doesn't-matter");
 
   @Before
   public void setup() {
