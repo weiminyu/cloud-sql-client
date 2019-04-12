@@ -33,12 +33,12 @@ public class SchemaExportsTest {
           .withUsername("postgres");
 
   @Before
-  public void setupClass() {
+  public void setup() {
     postgreSQLContainer.start();
   }
 
   @After
-  public void teardownClass() {
+  public void teardown() {
     postgreSQLContainer.stop();
   }
 
