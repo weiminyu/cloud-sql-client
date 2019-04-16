@@ -1,5 +1,6 @@
 package demoschema.hibernate;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class ServiceRegistries {
     packagePrefixes.stream()
         .map(p -> new Reflections(p).getTypesAnnotatedWith(Entity.class, honorInherited))
         .flatMap(Set::stream)
-        .sorted()
+        .sorted(Comparator.comparing(Class::getCanonicalName))
         .forEach(sources::addAnnotatedClass);
     return sources.getMetadataBuilder().build();
   }

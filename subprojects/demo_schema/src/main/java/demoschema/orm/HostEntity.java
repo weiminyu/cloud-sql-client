@@ -4,15 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/** ORM entity model for DNS domain. */
+/** ORM entity model for DNS host. */
 @Entity
-@Table(name = "domain")
-public class DomainEntity {
+@Table(name = "host")
+public class HostEntity {
   private String eppRepoId;
   private String fqdn;
 
   /** Default constructor for Hibernate. */
-  public DomainEntity() {}
+  public HostEntity() {}
 
   @Id
   public String getEppRepoId() {
