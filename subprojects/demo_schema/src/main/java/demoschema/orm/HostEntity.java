@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Table(name = "host")
 public class HostEntity {
   private String eppRepoId;
-  private String fqdn;
+  private String fqhn;
 
   /** Default constructor for Hibernate. */
   public HostEntity() {}
@@ -23,11 +23,11 @@ public class HostEntity {
     this.eppRepoId = eppRepoId;
   }
 
-  public String getFqdn() {
-    return fqdn;
+  public String getFqhn() {
+    return fqhn;
   }
 
-  public void setFqdn(String fqdn) {
-    this.fqdn = fqdn;
+  public void setFqhn(String fqhn) {
+    this.fqhn = fqhn;
   }
 }
