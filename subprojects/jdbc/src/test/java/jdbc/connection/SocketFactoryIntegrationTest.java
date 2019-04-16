@@ -23,8 +23,8 @@ public class SocketFactoryIntegrationTest {
   public void getDbVersion(DataSourceFactory dataSourceFactory, DbType dbType, TestDb dbDetails)
       throws Exception {
     DataSource dataSource = dataSourceFactory.getSocketFactoryDataSource(dbType, dbDetails);
-    try (Connection conn = dataSource.getConnection()) {
-      ResultSet resultSet = conn.createStatement().executeQuery(dbDetails.versionQuery);
+    try (Connection conn = dataSource.getConnection();
+        ResultSet resultSet = conn.createStatement().executeQuery(dbDetails.versionQuery)) {
       assertThat(resultSet.next()).isTrue();
       assertThat(resultSet.getString(dbDetails.resultColumnIndex))
           .startsWith(dbDetails.resultPrefix);

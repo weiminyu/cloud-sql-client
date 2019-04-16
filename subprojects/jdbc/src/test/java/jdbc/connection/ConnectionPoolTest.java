@@ -41,8 +41,8 @@ public class ConnectionPoolTest {
   public void connect_emptyDb(
       DataSourceFactory dataSourceFactory, String sql, int columnIndex, String resultPrefix)
       throws Exception {
-    try (Connection conn = dataSourceFactory.get().getConnection()) {
-      ResultSet resultSet = conn.createStatement().executeQuery(sql);
+    try (Connection conn = dataSourceFactory.get().getConnection();
+        ResultSet resultSet = conn.createStatement().executeQuery(sql)) {
       assertThat(resultSet.next()).isTrue();
       assertThat(resultSet.getString(columnIndex)).startsWith(resultPrefix);
       assertThat(resultSet.next()).isFalse();
