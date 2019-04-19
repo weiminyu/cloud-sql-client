@@ -1,3 +1,33 @@
+import com.google.common.base.Splitter
+import com.google.common.collect.ImmutableList
+
+buildscript {
+    dependencies {
+        classpath 'com.google.guava:guava:26.0-jre'
+        classpath 'org.postgresql:postgresql:42.2.5'
+    }
+}
+
+plugins {
+    id "org.flywaydb.flyway" version "5.2.4"
+}
+
+flyway {
+    ext.parseStringList = { comma_separated_string ->
+        return ImmutableList.copyOf(
+                Splitter.on(',').omitEmptyStrings().trimResults().split(comma_separated_string));
+    }
+
+    def host = getPropertyOrDefault('db_host', 'localhost')
+    def port = getPropertyOrDefault('db_port', '5432')
+    def dbname = getPropertyOrDefault('db_name', 'nomulus')
+
+    url = String.format('jdbc:postgresql://%s:%s/%s', host, port, dbname)
+    user = getPropertyOrDefault('db_user', 'postgres')
+    password = findProperty('db_password')
+    schemas = parseStringList(getPropertyOrDefault('db_schemas', 'public'));
+}
+
 dependencies {
     compile 'org.hibernate:hibernate-core:5.4.1.Final'
     compile 'org.hibernate:hibernate-hikaricp:5.4.1.Final'
@@ -6,6 +36,8 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql:42.2.5'
 
     compile 'org.reflections:reflections:0.9.11'
+
+    compile 'org.flywaydb:flyway-core:5.2.4'
 
     testCompile 'org.testcontainers:testcontainers:1.10.6'
     testCompile 'org.testcontainers:postgresql:1.10.6'

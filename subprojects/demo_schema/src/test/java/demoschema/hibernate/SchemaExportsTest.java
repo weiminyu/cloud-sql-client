@@ -7,8 +7,6 @@ import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import java.io.File;
 import java.io.IOException;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,16 +43,6 @@ public class SchemaExportsTest {
           .withInitScript("demoschema/hibernate/initial_schema.sql");
 
   @Rule public final TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-  @Before
-  public void setup() {
-    postgreSQLContainer.start();
-  }
-
-  @After
-  public void teardown() {
-    postgreSQLContainer.stop();
-  }
 
   @Test
   public void generateSchemaUpdate_mustRunFirst() throws IOException {

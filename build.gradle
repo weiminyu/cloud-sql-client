@@ -17,7 +17,9 @@ subprojects {
       googleJavaFormat()
     }
     format 'misc', {
-      target '**/*.gradle', '**/*.md', '**/.gitignore'
+      target '**/*.gradle', '**/*.md', '**/.gitignore', '**/*.sql'
+
+      targetExclude 'src/test/resources/**/*.sql'
 
       trimTrailingWhitespace()
       indentWithSpaces(2)
@@ -25,16 +27,22 @@ subprojects {
     }
   }
 
+  ext.getPropertyOrDefault = { name, defaultValue ->
+    if (project.hasProperty(name)) {
+      return project.findProperty(name)
+    }
+    return defaultValue
+  }
+
   dependencies {
     compile 'com.google.guava:guava:26.0-jre'
 
     testCompile 'com.google.truth.extensions:truth-java8-extension:0.39'
     testCompile 'com.google.truth:truth:0.42'
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.13-beta-2'
   }
 
   test {
     testLogging.showStandardStreams = true
   }
 }
-
