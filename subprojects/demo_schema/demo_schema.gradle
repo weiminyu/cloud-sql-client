@@ -1,6 +1,5 @@
 import com.google.common.base.Splitter
 import com.google.common.collect.ImmutableList
-import org.gradle.api.tasks.testing.Test
 
 buildscript {
     dependencies {
@@ -54,6 +53,7 @@ test {
 task integration_test(type: Test) {
     // Pass any connection parameters on Gradle command line to test.
     // JdbcUrl example: jdbc:postgresql://host:5432/dbName
+    // Note: property names are intentionally different from those used for flyway
     systemProperties project.getProperties().subMap('jdbcUrl', 'dbUser', 'dbPassword')
 
     include INTEGRATION_TESTS
