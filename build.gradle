@@ -1,11 +1,35 @@
+buildscript {
+    // Lock buildscript dependencies.
+    configurations.classpath {
+      resolutionStrategy.activateDependencyLocking()
+    }
+  }
+
 plugins {
   id 'com.diffplug.gradle.spotless' version '3.18.0' apply false
 }
+
+dependencyLocking {
+    lockAllConfigurations()
+  }
+
 
 subprojects { 
 
   repositories {
     mavenCentral()
+  }
+
+  buildscript {
+    // Lock buildscript dependencies.
+    configurations.classpath {
+      resolutionStrategy.activateDependencyLocking()
+    }
+  }
+
+  // Lock application dependencies.
+  dependencyLocking {
+    lockAllConfigurations()
   }
 
   apply plugin: 'java'

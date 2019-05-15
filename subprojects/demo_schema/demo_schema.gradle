@@ -1,5 +1,6 @@
 import com.google.common.base.Splitter
 import com.google.common.collect.ImmutableList
+import org.gradle.api.tasks.testing.Test
 
 buildscript {
     dependencies {
@@ -41,4 +42,19 @@ dependencies {
 
     testCompile 'org.testcontainers:testcontainers:1.10.6'
     testCompile 'org.testcontainers:postgresql:1.10.6'
+}
+
+def INTEGRATION_TESTS = [ "**/*IntegrationTest.*" ]
+
+test {
+    exclude INTEGRATION_TESTS
+}
+
+// Non-hermetic tests that require a database.
+task integration_test(type: Test) {
+    // Pass any connection parameters on Gradle command line to test.
+    // JdbcUrl example: jdbc:postgresql://host:5432/dbName
+    systemProperties project.getProperties().subMap('jdbcUrl', 'dbUser', 'dbPassword')
+
+    include INTEGRATION_TESTS
 }

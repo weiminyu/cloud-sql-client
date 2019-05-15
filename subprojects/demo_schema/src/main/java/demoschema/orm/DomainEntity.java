@@ -3,6 +3,7 @@ package demoschema.orm;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /** ORM entity model for DNS domain. */
 @Entity
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 public class DomainEntity {
   private String eppRepoId;
   private String fqdn;
+  private String nonSchemaElement;
 
   /** Default constructor for Hibernate. */
   public DomainEntity() {}
@@ -23,11 +25,20 @@ public class DomainEntity {
     this.eppRepoId = eppRepoId;
   }
 
-  public String getFqdn() {
+  String getFqdn() {
     return fqdn;
   }
 
-  public void setFqdn(String fqdn) {
+  void setFqdn(String fqdn) {
     this.fqdn = fqdn;
+  }
+
+  @Transient
+  String getNonSchemaElement() {
+    return nonSchemaElement;
+  }
+
+  void setNonSchemaElement(String nonSchemaElement) {
+    this.nonSchemaElement = nonSchemaElement;
   }
 }
