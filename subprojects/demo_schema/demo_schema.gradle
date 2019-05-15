@@ -1,5 +1,6 @@
 import com.google.common.base.Splitter
 import com.google.common.collect.ImmutableList
+import org.flywaydb.core.api.Location
 
 buildscript {
     dependencies {
@@ -25,7 +26,11 @@ flyway {
     url = String.format('jdbc:postgresql://%s:%s/%s', host, port, dbname)
     user = getPropertyOrDefault('db_user', 'postgres')
     password = findProperty('db_password')
-    schemas = parseStringList(getPropertyOrDefault('db_schemas', 'public'));
+    schemas = parseStringList(getPropertyOrDefault('db_schemas', 'public'))
+
+    // Must instantiate Location here. Using string as in online doc breaks
+    // the classpath for the whole project.
+    locations = new Location("flywaydb/migration")
 }
 
 dependencies {

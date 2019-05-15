@@ -3,10 +3,9 @@ package demoschema.flywaydb;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import java.util.Optional;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
-import org.flywaydb.core.api.configuration.ClassicConfiguration;
-import org.flywaydb.core.api.configuration.Configuration;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -29,15 +28,12 @@ public class FlywayTest {
 
   @Before
   public void setup() {
-    Configuration configuration =
-        Flyway.configure()
-            .dataSource(
-                POSTGRE_SQL_CONTAINER.getJdbcUrl(),
-                POSTGRE_SQL_CONTAINER.getUsername(),
-                POSTGRE_SQL_CONTAINER.getPassword());
-    ClassicConfiguration testConfig = new ClassicConfiguration(configuration);
-    testConfig.setLocationsAsStrings("demoschema/flywaydb/migration");
-    flyway = new Flyway(testConfig);
+    flyway =
+        FlywayUtils.createInstance(
+            POSTGRE_SQL_CONTAINER.getJdbcUrl(),
+            POSTGRE_SQL_CONTAINER.getUsername(),
+            POSTGRE_SQL_CONTAINER.getPassword(),
+            Optional.of("demoschema/flywaydb/migration"));
   }
 
   @Test
