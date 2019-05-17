@@ -1,4 +1,4 @@
-package demoschema.flywaydb;
+package flywaydb;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -33,7 +33,7 @@ public class FlywayTest {
             POSTGRE_SQL_CONTAINER.getJdbcUrl(),
             POSTGRE_SQL_CONTAINER.getUsername(),
             POSTGRE_SQL_CONTAINER.getPassword(),
-            Optional.of("demoschema/flywaydb/migration"));
+            Optional.of("flywaydb/migration"));
   }
 
   @Test

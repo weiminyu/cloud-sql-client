@@ -1,4 +1,4 @@
-package demoschema.flywaydb;
+package flywaydb;
 
 import java.util.Optional;
 import org.flywaydb.core.Flyway;
