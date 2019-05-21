@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <!-- New changes should be included below in chronological order. -->
+
+  <!-- May 21, 2019, define domain table-->
+  <include file="liquibase/migration/xml/052819_create_domain_table.xml"/>
+  <include file="liquibase/migration/xml/052819b_create_host_table.xml"/>
+</databaseChangeLog>
