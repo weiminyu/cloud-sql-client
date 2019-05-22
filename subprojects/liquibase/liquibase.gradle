@@ -6,16 +6,22 @@ buildscript {
 
 plugins {
     id 'org.liquibase.gradle' version '2.0.1'
+    id 'java-library'
 }
 
 dependencies {
     liquibaseRuntime 'org.liquibase:liquibase-core:3.6.1'
-    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
     liquibaseRuntime 'org.postgresql:postgresql:42.2.5'
     liquibaseRuntime project(':demo_schema')
 
     // Needed for task dependency declarations at the end of this script
     compile project(':demo_schema')
+
+    compile 'org.liquibase:liquibase-core:3.6.1'
+
+    testRuntimeOnly 'org.postgresql:postgresql:42.2.5'
+    testCompile 'org.testcontainers:postgresql:1.10.6'
+    testCompile 'org.testcontainers:testcontainers:1.10.6'
 }
 
 liquibase {
@@ -23,7 +29,8 @@ liquibase {
     activities {
         main {
             def format = project.ext.getPropertyOrDefault('change_format', 'xml')
-            changeLogFile "${projectDir.getAbsolutePath()}/../demo_schema/src/main/resources/liquibase/migration/${format}/ChangeLog.${format}"
+            // ChangeLog is from :demo_schema
+            changeLogFile "liquibase/migration/${format}/ChangeLog.${format}"
             url String.format('jdbc:postgresql://%s:%s/%s',
                     project.ext.getPropertyOrDefault('db_host', 'localhost'),
                     project.ext.getPropertyOrDefault('db_port', '5432'),
