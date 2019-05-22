@@ -37,9 +37,6 @@ public class SchemaExportsTest {
   @ClassRule
   public static final PostgreSQLContainer<?> postgreSQLContainer =
       new PostgreSQLContainer<>("postgres:9.6.12")
-          .withDatabaseName("anything-goes")
-          .withUsername("whomever")
-          .withPassword("doesn't-matter")
           .withInitScript("demoschema/hibernate/initial_schema.sql");
 
   @Rule public final TemporaryFolder temporaryFolder = new TemporaryFolder();

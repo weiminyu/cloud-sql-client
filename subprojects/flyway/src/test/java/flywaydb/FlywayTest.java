@@ -19,10 +19,7 @@ public class FlywayTest {
 
   @ClassRule
   public static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER =
-      new PostgreSQLContainer<>("postgres:9.6.12")
-          .withDatabaseName("anything-goes")
-          .withUsername("whomever")
-          .withPassword("doesn't-matter");
+      new PostgreSQLContainer<>("postgres:9.6.12");
 
   private Flyway flyway;
 
