@@ -33,7 +33,7 @@ public class FlywayTest {
             POSTGRE_SQL_CONTAINER.getJdbcUrl(),
             POSTGRE_SQL_CONTAINER.getUsername(),
             POSTGRE_SQL_CONTAINER.getPassword(),
-            Optional.of("flywaydb/migration"));
+            Optional.of("schema/migration"));
   }
 
   @Test
