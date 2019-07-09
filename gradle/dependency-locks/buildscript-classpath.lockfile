@@ -8,11 +8,14 @@ com.diffplug.gradle.spotless:com.diffplug.gradle.spotless.gradle.plugin:3.18.0
 com.diffplug.spotless:spotless-lib-extra:1.18.0
 com.diffplug.spotless:spotless-lib:1.18.0
 com.diffplug.spotless:spotless-plugin-gradle:3.18.0
+com.dorongold.task-tree:com.dorongold.task-tree.gradle.plugin:1.4
 com.googlecode.concurrent-trees:concurrent-trees:2.6.1
 com.googlecode.javaewah:JavaEWAH:1.1.6
 com.jcraft:jsch:0.1.54
 commons-codec:commons-codec:1.6
 commons-logging:commons-logging:1.1.3
+gradle.plugin.com.dorongold.plugins:task-tree:1.4
+org.apache.commons:commons-lang3:3.4
 org.apache.httpcomponents:httpclient:4.3.6
 org.apache.httpcomponents:httpcore:4.3.3
 org.codehaus.groovy:groovy-xml:2.4.7
