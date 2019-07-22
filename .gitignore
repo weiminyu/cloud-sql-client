@@ -3,3 +3,7 @@
 
 # Ignore Gradle build output directory
 build
+
+# Intellij directory and file
+.idea
+cloud-sql-client.iml
