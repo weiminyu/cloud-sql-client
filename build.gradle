@@ -63,8 +63,8 @@ subprojects {
   dependencies {
     compile 'com.google.guava:guava:26.0-jre'
 
-    testCompile 'com.google.truth.extensions:truth-java8-extension:0.39'
-    testCompile 'com.google.truth:truth:0.42'
+    testCompile 'com.google.truth.extensions:truth-java8-extension:0.45'
+    testCompile 'com.google.truth:truth:0.45'
     testCompile 'junit:junit:4.13-beta-2'
   }
 
