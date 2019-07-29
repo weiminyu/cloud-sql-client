@@ -41,6 +41,8 @@ public class ServiceRegistries {
     settings.put(Environment.HBM2DDL_AUTO, "validate"); // Always use validate!
     settings.put(Environment.SHOW_SQL, true);
 
+    settings.put(Environment.PHYSICAL_NAMING_STRATEGY, NomulusNamingStrategy.class);
+
     // Maximum waiting time for a connection from the pool
     settings.put("hibernate.hikari.connectionTimeout", "20000");
     // Minimum number of ideal connections in the pool

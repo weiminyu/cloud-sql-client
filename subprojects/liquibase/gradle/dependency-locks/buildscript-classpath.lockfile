@@ -1,0 +1,7 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+gradle.plugin.org.liquibase:liquibase-gradle-plugin:2.0.1
+org.codehaus.groovy:groovy:2.4.12
+org.liquibase.gradle:org.liquibase.gradle.gradle.plugin:2.0.1
+org.postgresql:postgresql:42.2.5

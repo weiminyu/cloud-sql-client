@@ -3,21 +3,23 @@ package testutils;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.truth.Truth.assertAbout;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.github.difflib.DiffUtils;
 import com.github.difflib.UnifiedDiffUtils;
 import com.github.difflib.algorithm.DiffException;
 import com.github.difflib.patch.Patch;
 import com.github.difflib.text.DiffRow;
-import com.github.difflib.text.DiffRow.Tag;
 import com.github.difflib.text.DiffRowGenerator;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.io.Resources;
 import com.google.common.truth.Fact;
 import com.google.common.truth.FailureMetadata;
 import com.google.common.truth.Subject;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Comparator;
@@ -30,6 +32,8 @@ import java.util.stream.Collectors;
  * easy-to-read format.
  */
 public final class TextSubject extends Subject {
+
+  private static final String ACTUAL_VALUE_ONLY_PROPERTY = "actual_only";
 
   private final Supplier<List<String>> actual;
   private DiffFormat diffFormat = DiffFormat.SIDE_BY_SIDE;
@@ -49,15 +53,27 @@ public final class TextSubject extends Subject {
     contentEquals(Files.readAllLines(expected.toPath()));
   }
 
+  public void contentEquals(URL resourceUrl) throws IOException {
+    contentEquals(Resources.asCharSource(resourceUrl, UTF_8).readLines());
+  }
+
   public void contentEquals(List<String> expectedContent) {
     checkNotNull(expectedContent, "expectedContent");
     List<String> actualContent = actual.get();
-    String diffString = diffFormat.generateDiff(expectedContent, actualContent);
-    if (diffString.isEmpty()) {
+    if (expectedContent.equals(actualContent)) {
       return;
     }
+    DiffFormat effectiveFormat =
+        System.getProperty(ACTUAL_VALUE_ONLY_PROPERTY) == null
+            ? diffFormat
+            : DiffFormat.ACTUAL_VALUE_ONLY;
+    String diffString = effectiveFormat.generateDiff(expectedContent, actualContent);
     failWithoutActual(
-        Fact.simpleFact(Joiner.on('\n').join("Files differ in content:", diffString)));
+        Fact.simpleFact(
+            Joiner.on('\n')
+                .join(
+                    "Files differ in content. Displaying " + effectiveFormat.name().toLowerCase(),
+                    diffString)));
   }
 
   static String generateUnifiedDiff(List<String> expectedContent, List<String> actualContent) {
@@ -86,10 +102,6 @@ public final class TextSubject extends Subject {
       rows = generator.generateDiffRows(expectedContent, actualContent);
     } catch (DiffException e) {
       throw new RuntimeException(e);
-    }
-
-    if (rows.stream().map(DiffRow::getTag).allMatch(Tag.EQUAL::equals)) {
-      return "";
     }
 
     int maxExpectedLineLength =
@@ -165,7 +177,7 @@ public final class TextSubject extends Subject {
     }
   }
 
-  enum DiffFormat {
+  public enum DiffFormat {
     UNIFIED_DIFF {
       @Override
       String generateDiff(List<String> expected, List<String> actual) {
@@ -176,6 +188,12 @@ public final class TextSubject extends Subject {
       @Override
       String generateDiff(List<String> expected, List<String> actual) {
         return generateSideBySideDiff(expected, actual);
+      }
+    },
+    ACTUAL_VALUE_ONLY {
+      @Override
+      String generateDiff(List<String> expected, List<String> actual) {
+        return Joiner.on('\n').join(actual);
       }
     };
 

@@ -1,6 +1,6 @@
 
-    create table domain (
-       eppRepoId varchar(255) not null,
+    create table "Domain" (
+       epp_repo_id varchar(255) not null,
         fqdn varchar(255),
-        primary key (eppRepoId)
+        primary key (epp_repo_id)
     );

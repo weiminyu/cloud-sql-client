@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+          http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+    version="2.2">
+  <persistence-unit name="nomulus" transaction-type="RESOURCE_LOCAL">
+    <description>
+      Persistence unit for the Nomulus Cloud SQL database.
+    </description>
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+    <!--
+      All JPA entities must be enumerated here. JPA does not support auto detection.
+
+      Note that Hibernate's auto detection functionality (hibernate.archive.autodection)
+      does not meet our needs. It only scans archives, not the 'classes' folders. So we
+      are left with two options:
+      *  Move tests to another (sub)project. This is not a big problem, but feels unnatural.
+      *  Use Hibernate's ServiceRegistry for bootstrapping (not JPA-compliant)
+    -->
+    <class>demoschema.orm.Domain</class>
+    <class>demoschema.orm.Host</class>
+    <class>demoschema.orm.RegistryLock</class>
+
+    <!-- TODO(weiminyu): check out application-layer validation. -->
+    <validation-mode>NONE</validation-mode>
+    <properties>
+      <!-- ORM properties. -->
+      <property name="hibernate.physical_naming_strategy"
+          value="demoschema.hibernate.NomulusNamingStrategy"/>
+
+      <!-- Whether to log all SQL queries. Overridable at runtime. -->
+      <property name="hibernate.show_sql" value="false"/>
+      <!-- Never modify the schema. May use 'none' or 'validate'-->
+      <property name="hibernate.hbm2ddl.auto" value="none"/>
+
+      <!-- Database URL and credentials. -->
+      <property name="javax.persistence.jdbc.url" value="SET-AT-RUNTIME"/>
+      <property name="javax.persistence.jdbc.user" value="SET-AT-RUNTIME"/>
+      <property name="javax.persistence.jdbc.password" value="SET-AT-RUNTIME"/>
+
+      <!-- JDBC Driver configurations. -->
+      <property name="hibernate.hikari.connectionTimeout" value="20000"/>
+      <property name="hibernate.hikari.minimumIdle" value="0"/>
+      <property name="hibernate.hikari.maximumPoolSize" value="20"/>
+      <property name="hibernate.hikari.idleTimeout" value="300000"/>
+    </properties>
+  </persistence-unit>
+</persistence>

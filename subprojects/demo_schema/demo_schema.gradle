@@ -1,28 +1,47 @@
-dependencies {
-    compile 'org.hibernate:hibernate-core:5.4.1.Final'
-    compile 'org.hibernate:hibernate-hikaricp:5.4.1.Final'
-
-    compile 'com.zaxxer:HikariCP:3.3.1'
-    runtimeOnly 'org.postgresql:postgresql:42.2.5'
-
-    compile 'org.reflections:reflections:0.9.11'
-
-    testCompile 'org.testcontainers:testcontainers:1.10.6'
-    testCompile 'org.testcontainers:postgresql:1.10.6'
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.google.guava:guava:26.0-jre'
+  }
 }
 
-def INTEGRATION_TESTS = [ "**/*IntegrationTest.*" ]
+import static com.google.common.base.Preconditions.checkState
+
+dependencies {
+  compile 'org.hibernate:hibernate-core:5.4.1.Final'
+  compile 'org.hibernate:hibernate-hikaricp:5.4.1.Final'
+
+  compile 'com.zaxxer:HikariCP:3.3.1'
+  runtimeOnly 'org.postgresql:postgresql:42.2.5'
+
+  compile 'org.reflections:reflections:0.9.11'
+
+  testCompile 'org.testcontainers:testcontainers:1.10.6'
+  testCompile 'org.testcontainers:postgresql:1.10.6'
+
+  testCompile project(':testutils')
+}
+
+def INTEGRATION_TESTS = ["**/*IntegrationTest.*"]
 
 test {
-    exclude INTEGRATION_TESTS
+  systemProperties project.getProperties().subMap('actual_only')
 }
 
 // Non-hermetic tests that require a database.
 task integration_test(type: Test) {
-    // Pass any connection parameters on Gradle command line to test.
-    // JdbcUrl example: jdbc:postgresql://host:5432/dbName
-    // Note: property names are intentionally different from those used for flyway
-    systemProperties project.getProperties().subMap('jdbcUrl', 'dbUser', 'dbPassword')
+  // Pass any connection parameters on Gradle command line to test.
+  // JdbcUrl example: jdbc:postgresql://host:5432/dbName
+  // Note: property names are intentionally different from those used for flyway
+  systemProperties project.getProperties().subMap('jdbcUrl', 'dbUser', 'dbPassword')
 
-    include INTEGRATION_TESTS
+  include INTEGRATION_TESTS
+
+  doFirst {
+    checkState(
+        project.hasProperty('jdbcUrl'),
+        "Missing command line flags for jdbcUrl, dbUser, or dbPassword")
+  }
 }

@@ -2,17 +2,15 @@ package demoschema.orm;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 /** ORM entity model for DNS host. */
 @Entity
-@Table(name = "host")
-public class HostEntity {
+public class Host {
   private String eppRepoId;
   private String fqhn;
 
   /** Default constructor for Hibernate. */
-  public HostEntity() {}
+  public Host() {}
 
   @Id
   public String getEppRepoId() {
