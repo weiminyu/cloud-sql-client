@@ -13,11 +13,11 @@ public class RegistryLockId implements Serializable {
 
   private Long revisionId;
 
-  private String repoId;
+  private Long repoId;
 
   public RegistryLockId() {}
 
-  public RegistryLockId(String repoId, Long revisionId) {
+  public RegistryLockId(Long repoId, Long revisionId) {
     this.repoId = repoId;
     this.revisionId = revisionId;
   }
@@ -38,11 +38,11 @@ public class RegistryLockId implements Serializable {
     this.revisionId = revisionId;
   }
 
-  public String getRepoId() {
+  public Long getRepoId() {
     return repoId;
   }
 
-  public void setRepoId(String repoId) {
+  public void setRepoId(Long repoId) {
     this.repoId = repoId;
   }
 

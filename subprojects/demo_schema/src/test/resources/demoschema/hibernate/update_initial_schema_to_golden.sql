@@ -6,7 +6,7 @@
     );
 
     create table "RegistryLock" (
-       repo_id varchar(255) not null,
+       repo_id  bigserial not null,
         revision_id bigserial not null,
         primary key (repo_id, revision_id)
     );

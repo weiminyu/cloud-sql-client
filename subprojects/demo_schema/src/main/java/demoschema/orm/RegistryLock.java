@@ -15,16 +15,16 @@ public class RegistryLock {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  //@Column(columnDefinition = "bigserial")
+  @Column(columnDefinition = "bigserial")
   private Long revisionId;
 
   @Id
-  @Column(columnDefinition = "varchar(255)")
-  private String repoId;
+  @Column(columnDefinition = "bigserial")
+  private Long repoId;
 
   public RegistryLock() {}
 
-  public RegistryLock(String repoId, Long revisionId) {
+  public RegistryLock(Long repoId, Long revisionId) {
     this.repoId = repoId;
     this.revisionId = revisionId;
   }
