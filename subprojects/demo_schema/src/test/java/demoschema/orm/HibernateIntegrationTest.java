@@ -81,10 +81,21 @@ public class HibernateIntegrationTest {
   }
 
   @Test
+  public void testHost() {
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    Host entity = new Host();
+    entityManager.persist(entity);
+    entityManager.flush();
+    entityManager.getTransaction().commit();
+    entityManager.close();
+  }
+
+  @Test
   public void testRegistryLock() {
     EntityManager entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    RegistryLock entity = new RegistryLock(new RegistryLockId("whatever"));
+    RegistryLock entity = new RegistryLock("whatever", null);
     entityManager.persist(entity);
     entityManager.getTransaction().commit();
     Optional<RegistryLockId> lockWithHighestRevisionId =

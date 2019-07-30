@@ -1,6 +1,6 @@
 
     create table "Host" (
-       epp_repo_id varchar(255) not null,
+       epp_repo_id  bigserial not null,
         fqhn varchar(255),
         primary key (epp_repo_id)
     );
