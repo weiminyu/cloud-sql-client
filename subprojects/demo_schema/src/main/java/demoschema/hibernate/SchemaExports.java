@@ -1,5 +1,6 @@
 package demoschema.hibernate;
 
+import com.google.common.base.Joiner;
 import java.util.EnumSet;
 import java.util.List;
 import org.hibernate.boot.Metadata;
@@ -12,6 +13,25 @@ import org.hibernate.tool.schema.TargetType;
 
 /** Utility methods that export full or incremental schema to a file. */
 public class SchemaExports {
+
+  public static void exportFullSchema(
+      String jdbcUrl,
+      String user,
+      String password,
+      List<String> importFilePath,
+      List<String> ormPackagePrefixes,
+      String schemaFile) {
+    try (AutoCloseServiceRegistry registry =
+        new AutoCloseServiceRegistry(jdbcUrl, user, password)) {
+      Metadata metadata = registry.getMetadata(ormPackagePrefixes);
+      SchemaExport schemaExport = new SchemaExport();
+      schemaExport.setOutputFile(schemaFile);
+      schemaExport.setImportFiles(Joiner.on(',').join(importFilePath));
+      schemaExport.setFormat(true);
+      schemaExport.setDelimiter(";");
+      schemaExport.execute(EnumSet.of(TargetType.SCRIPT), Action.CREATE, metadata);
+    }
+  }
 
   /**
    * Exports the full schema creation script from all ORM entity classes found in {@code

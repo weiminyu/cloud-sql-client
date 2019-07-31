@@ -6,7 +6,26 @@
     );
 
     create table "RegistryLock" (
-       repo_id  bigserial not null,
-        revision_id bigserial not null,
-        primary key (repo_id, revision_id)
+       revision_id  bigserial not null,
+        creation_timestamp timestamp not null,
+        domain_name varchar(255) not null,
+        is_super_user boolean not null,
+        lock_action varchar(255) not null,
+        lock_status varchar(255) not null,
+        lock_timestamp timestamp,
+        locking_registrar_contact_id varchar(255),
+        registrar_client_id varchar(255) not null,
+        repo_id varchar(255) not null,
+        transaction_lock int4,
+        unlock_timestamp timestamp,
+        unlocking_registrar_contact_id varchar(255),
+        verification_code varchar(255) not null,
+        primary key (revision_id),
+        check (locking_registrar_contact_id IS NOT NULL OR unlocking_registrar_contact_id IS NOT NULL)
     );
+
+    alter table if exists "RegistryLock" 
+       drop constraint if exists idx_registry_lock_repo_id_revision_id;
+
+    alter table if exists "RegistryLock" 
+       add constraint idx_registry_lock_repo_id_revision_id unique (repo_id, revision_id);

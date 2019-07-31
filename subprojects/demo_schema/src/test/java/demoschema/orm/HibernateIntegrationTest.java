@@ -1,6 +1,7 @@
 package demoschema.orm;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.truth.Truth8.assertThat;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Comparator;
@@ -95,17 +96,52 @@ public class HibernateIntegrationTest {
   public void testRegistryLock() {
     EntityManager entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
-    // Auto-increment column in composite key is not supported in Hibernate 5.4.
-    // The persist call will fail.
-    RegistryLock entity = new RegistryLock(1L, null);
-    //entityManager.persist(entity);
+    RegistryLock entity = createRegistryLock(LockAction.LOCK);
+    entityManager.persist(entity);
+    entityManager.persist(createRegistryLock(LockAction.UNLOCK));
     entityManager.getTransaction().commit();
-    Optional<RegistryLockId> lockWithHighestRevisionId =
+    Optional<Long> lockWithHighestRevisionId =
         entityManager.createQuery("from RegistryLock", RegistryLock.class).getResultList().stream()
-            .map(RegistryLock::getId)
-            .sorted(Comparator.comparing(RegistryLockId::getRevisionId).reversed())
+            .sorted(Comparator.comparing(RegistryLock::getRevisionId).reversed())
+            .map(RegistryLock::getRevisionId)
             .findFirst();
     entityManager.close();
+    assertThat(lockWithHighestRevisionId).hasValue(entity.getRevisionId() + 1);
+  }
 
+  @Test
+  public void testUpdateRegistryLock() {
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    entityManager.persist(createRegistryLock(LockAction.LOCK));
+    entityManager.getTransaction().commit();
+    entityManager.clear();
+    ;
+
+    entityManager.getTransaction().begin();
+    Optional<RegistryLock> entity =
+        entityManager.createQuery("from RegistryLock order by revisionId DESC").setMaxResults(1)
+            .getResultList().stream()
+            .findAny();
+    assertThat(entity).isPresent();
+    entity.get().setLockAction(LockAction.UNLOCK);
+    // TODO: make concurrent update and verify OptimisticLockException is thrown.
+    entityManager.getTransaction().commit();
+    entityManager.close();
+  }
+
+  private static RegistryLock createRegistryLock(LockAction lockAction) {
+    RegistryLock registryLock = new RegistryLock("some_repo_id");
+    registryLock.setDomainName("domain.tld");
+    registryLock.setLockAction(lockAction);
+    registryLock.setLockStatus(LockStatus.NOT_LOCKED);
+    registryLock.setRegistrarClientId("registrar_client_id");
+    registryLock.setVerificationCode("blah");
+    if (lockAction.equals(LockAction.LOCK)) {
+      registryLock.setLockingRegistrarContactId("locking_registrar");
+    } else {
+      registryLock.setUnlockingRegistrarContactId("unlocking_registrar");
+    }
+    return registryLock;
   }
 }
