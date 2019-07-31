@@ -9,6 +9,10 @@ buildscript {
 
 import static com.google.common.base.Preconditions.checkState
 
+plugins {
+  id 'maven-publish'
+}
+
 dependencies {
   compile 'org.hibernate:hibernate-core:5.4.1.Final'
   compile 'org.hibernate:hibernate-hikaricp:5.4.1.Final'
@@ -22,6 +26,38 @@ dependencies {
   testCompile 'org.testcontainers:postgresql:1.10.6'
 
   testCompile project(':testutils')
+}
+
+tasks.jar.archiveClassifier = 'all'
+
+task schemaJar(type: Jar) {
+  archiveBaseName = 'schema'
+  archiveClassifier = 'orm'
+  from(sourceSets.main.output) {
+    include 'demoschema/orm/**'
+  }
+}
+
+artifacts {
+  archives schemaJar
+}
+
+publishing {
+  repositories {
+    maven {
+      url project.hasProperty('maven_repo') ? "$maven_repo" : 'file:///tmp'
+    }
+  }
+  publications {
+    schemaOrmPublication(MavenPublication) {
+      groupId 'demoschema'
+      artifactId 'demoschema'
+      version '2'
+
+      from components.java
+      artifact schemaJar
+    }
+  }
 }
 
 def INTEGRATION_TESTS = ["**/*IntegrationTest.*"]
