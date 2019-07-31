@@ -1,0 +1,24 @@
+project.ext.findMavenRepo = {
+  if (project.hasProperty('maven_repo') && !project.getProperty('maven_repo').trim().isEmpty()) {
+    return java.util.Optional.of(project.getProperty('maven_repo'))
+  }
+  return java.util.Optional.empty();
+}
+
+def mavenRepo = project.ext.findMavenRepo()
+
+repositories {
+  if (mavenRepo.isPresent()) {
+    maven {
+      url "${mavenRepo.get()}"
+    }
+  }
+}
+
+dependencies {
+  if (mavenRepo.isPresent()) {
+    compile 'demoschema:demoschema:2:orm'
+  } else {
+    compile project(':demo_schema')
+  }
+}
