@@ -22,7 +22,6 @@
         locking_registrar_contact_id varchar(255),
         registrar_client_id varchar(255) not null,
         repo_id varchar(255) not null,
-        transaction_lock int4,
         unlock_timestamp timestamp,
         unlocking_registrar_contact_id varchar(255),
         verification_code varchar(255) not null,

@@ -1,14 +1,18 @@
 package demoschema.orm;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 
 import com.google.common.collect.ImmutableMap;
+import demoschema.orm.NotPortable.Cause;
+import java.sql.Connection;
 import java.util.Comparator;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import org.hibernate.Session;
 import org.hibernate.cfg.Environment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -63,6 +67,20 @@ public class HibernateIntegrationTest {
   public static void tearDown() {
     entityManagerFactory.close();
     inMemoryTestDatabase.ifPresent(PostgreSQLContainer::stop);
+  }
+
+  @Test
+  @NotPortable(cause = Cause.ORM, details = "Session")
+  public void testIsolationLevel() {
+    // TODO(weiminyu): implement an autocloseable entity manager.
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
+    Session session = entityManager.unwrap(Session.class);
+    int isolationLevel =
+        session.doReturningWork(connection -> connection.getTransactionIsolation());
+    entityManager.getTransaction().commit();
+    // Isolation level is defined in persistence.xml
+    assertThat(isolationLevel).isEqualTo(Connection.TRANSACTION_SERIALIZABLE);
   }
 
   @Test

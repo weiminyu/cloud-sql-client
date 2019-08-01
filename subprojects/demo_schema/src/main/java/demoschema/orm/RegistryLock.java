@@ -1,5 +1,6 @@
 package demoschema.orm;
 
+import demoschema.orm.NotPortable.Cause;
 import java.time.ZonedDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -26,7 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Check(
     constraints =
         "locking_registrar_contact_id IS NOT NULL OR unlocking_registrar_contact_id IS NOT NULL")
-@NonPortable(orm = true)
+@NotPortable(cause = Cause.ORM, details = "@Check")
 public class RegistryLock {
 
   @Id
@@ -35,9 +35,6 @@ public class RegistryLock {
 
   @Column(nullable = false)
   private String repoId;
-
-  // Optimistic lock.
-  @Version private Integer transactionLock;
 
   @Column(nullable = false)
   private String domainName;
@@ -57,7 +54,7 @@ public class RegistryLock {
   private LockStatus lockStatus;
 
   @CreationTimestamp
-  @NonPortable(orm = true)
+  @NotPortable(cause = Cause.ORM, details = "@CreationTimestamp")
   @Column(nullable = false)
   private ZonedDateTime creationTimestamp;
 
@@ -178,13 +175,5 @@ public class RegistryLock {
 
   public void setLockStatus(LockStatus lockStatus) {
     this.lockStatus = lockStatus;
-  }
-
-  public Integer getTransactionLock() {
-    return transactionLock;
-  }
-
-  public void setTransactionLock(Integer transactionLock) {
-    this.transactionLock = transactionLock;
   }
 }

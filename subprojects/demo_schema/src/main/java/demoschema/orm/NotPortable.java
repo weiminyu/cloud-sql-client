@@ -1,21 +1,24 @@
 package demoschema.orm;
 
-import demoschema.orm.NonPortable.NonPortables;
+import demoschema.orm.NotPortable.NonPortables;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
 @Repeatable(value = NonPortables.class)
-public @interface NonPortable {
+public @interface NotPortable {
 
-  boolean database() default false;
-
-  boolean orm() default false;
+  Cause cause();
 
   String details() default "";
 
   @interface NonPortables {
-    NonPortable[] value();
+    NotPortable[] value();
+  }
+
+  enum Cause {
+    DATABASE,
+    ORM
   }
 }

@@ -30,6 +30,19 @@
       <property name="hibernate.physical_naming_strategy"
           value="demoschema.hibernate.NomulusNamingStrategy"/>
 
+      <!--
+        Make 'SERIALIZABLE' the default isolation level to ensure correctness.
+
+        Entities that are never involved in multi-table transactions may use optimistic
+        locks and a less strict isolation level. We may lower individual transaction's
+        isolation level using a framework-dependent method.
+
+        Alternatively, if a use case calls for, we may also use a lower isolation level but
+        lock tables explicitly, either using framework-dependent API, or execute "select table for
+        update" statements directly.
+      -->
+      <property name="hibernate.connection.isolation" value="TRANSACTION_SERIALIZABLE"/>
+
       <!-- Whether to log all SQL queries. Overridable at runtime. -->
       <property name="hibernate.show_sql" value="false"/>
       <!-- Never modify the schema. May use 'none' or 'validate'-->
