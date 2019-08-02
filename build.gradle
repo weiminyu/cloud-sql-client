@@ -9,6 +9,8 @@ plugins {
   id 'com.diffplug.gradle.spotless' version '3.18.0' apply false
   // gradlew <GradleTask> taskTree
   id "com.dorongold.task-tree" version "1.4"
+
+  id 'jacoco'
 }
 
 dependencyLocking {
@@ -37,6 +39,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'java-library'
   apply plugin: 'com.diffplug.gradle.spotless'
+  apply plugin: 'jacoco'
 
   spotless {
     java {
@@ -70,5 +73,6 @@ subprojects {
 
   test {
     testLogging.showStandardStreams = true
+    finalizedBy jacocoTestReport
   }
 }
