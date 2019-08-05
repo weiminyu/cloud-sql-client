@@ -143,7 +143,6 @@ public class HibernateIntegrationTest {
             .findAny();
     assertThat(entity).isPresent();
     entity.get().setLockAction(LockAction.UNLOCK);
-    // TODO: make concurrent update and verify OptimisticLockException is thrown.
     entityManager.getTransaction().commit();
     entityManager.close();
   }
