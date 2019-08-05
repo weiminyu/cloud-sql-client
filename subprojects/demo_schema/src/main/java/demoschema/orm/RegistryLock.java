@@ -27,6 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
     constraints =
         "locking_registrar_contact_id IS NOT NULL OR unlocking_registrar_contact_id IS NOT NULL")
 @NotPortable(cause = Cause.ORM, details = "@Check")
+@IdempotencyCheck(properties = "verificationCode", isBestEffort = true)
 public class RegistryLock {
 
   @Id
