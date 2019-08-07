@@ -1,8 +1,9 @@
 project.ext.findMavenRepo = {
-  if (project.hasProperty('maven_repo') && !project.getProperty('maven_repo').trim().isEmpty()) {
+  if (project.hasProperty('maven_repo')
+      && !project.getProperty('maven_repo').trim().isEmpty()) {
     return java.util.Optional.of(project.getProperty('maven_repo'))
   }
-  return java.util.Optional.empty();
+  return java.util.Optional.of('gcs://oval-cyclist-maven-repo')
 }
 
 def mavenRepo = project.ext.findMavenRepo()
@@ -17,7 +18,7 @@ repositories {
 
 dependencies {
   if (mavenRepo.isPresent()) {
-    compile 'demoschema:demoschema:2:orm'
+    compile 'demoschema:demoschema:prod:orm'
   } else {
     compile project(':demo_schema')
   }

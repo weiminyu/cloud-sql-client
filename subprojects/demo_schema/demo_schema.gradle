@@ -30,6 +30,14 @@ dependencies {
 
 tasks.jar.archiveClassifier = 'all'
 
+task schemaSourcesJar(type: Jar) {
+  archiveBaseName = 'schema'
+  archiveClassifier = 'sources'
+  from(sourceSets.main.allJava) {
+    include 'demoschema/orm/**'
+  }
+}
+
 task schemaJar(type: Jar) {
   archiveBaseName = 'schema'
   archiveClassifier = 'orm'
@@ -56,6 +64,7 @@ publishing {
 
       from components.java
       artifact schemaJar
+      artifact schemaSourcesJar
     }
   }
 }

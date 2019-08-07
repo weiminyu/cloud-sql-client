@@ -1,9 +1,9 @@
 buildscript {
-    // Lock buildscript dependencies.
-    configurations.classpath {
-      resolutionStrategy.activateDependencyLocking()
-    }
+  // Lock buildscript dependencies.
+  configurations.classpath {
+    resolutionStrategy.activateDependencyLocking()
   }
+}
 
 plugins {
   id 'com.diffplug.gradle.spotless' version '3.18.0' apply false
