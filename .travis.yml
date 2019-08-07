@@ -29,3 +29,4 @@ env:
 # comments at the top of the file.
 script: chmod 755 ./gradlew && travis_wait 45 ./gradlew build
 
+after_script: git status && git remote -v
