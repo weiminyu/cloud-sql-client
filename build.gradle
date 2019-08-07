@@ -75,11 +75,27 @@ subprojects {
     testLogging.showStandardStreams = true
     finalizedBy jacocoTestReport
   }
+
+  task checkConflictingChanges {
+    doLast {
+      def appChanges =
+          rootProject.ext.changedFileCount('subprojects/demo_app', false)
+      def schemaChanges =
+          rootProject.ext.changedFileCount('subprojects/demo_schema', false)
+
+      if (appChanges > 0 && schemaChanges > 0) {
+        throw new IllegalStateException(
+            'Simultaneous changes to both demo_schema and demo_app '
+                + 'may not be submitted.')
+      }
+    }
+  }
+  build.finalizedBy checkConflictingChanges
 }
 
-// Execute an arbitrary shell command in bash and returns all output to stdout as a string.
-// This method allows pipes in shell command.
-ext.execWithBash = { shellCommand, bashWorkingDir ->
+// Executes an arbitrary shell command in bash and returns all output
+// to stdout as a string. This method allows pipes in shell command.
+rootProject.ext.execWithBash = { shellCommand, bashWorkingDir ->
   return new ByteArrayOutputStream().withStream { os ->
     exec {
       workingDir bashWorkingDir
@@ -90,10 +106,12 @@ ext.execWithBash = { shellCommand, bashWorkingDir ->
   }.toString()
 }
 
-// Counts the changed files under the given folder.
-ext.changedFileCount = { folderName, stagedOnly ->
-  def shellCommand = stagedOnly
-          ? 'git diff --name-only --staged ' + folderName + ' | wc -l'
-          : 'git diff --name-only ' + folderName + ' | wc -l'
-  return Integer.valueOf(ext.execWithBash(shellCommand, rootDir).trim())
+// Counts the changed files under the given folder against origin/master.
+rootProject.ext.changedFileCount = { folderName, stagedOnly ->
+  def shellCommand =
+          String.format('git diff --name-only %s origin/master %s | wc -l',
+              stagedOnly ? '--staged' : '',
+              folderName)
+  return Integer.valueOf(
+          rootProject.ext.execWithBash(shellCommand, rootDir).trim())
 }
