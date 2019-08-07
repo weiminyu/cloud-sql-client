@@ -3,7 +3,7 @@ project.ext.findMavenRepo = {
       && !project.getProperty('maven_repo').trim().isEmpty()) {
     return java.util.Optional.of(project.getProperty('maven_repo'))
   }
-  return java.util.Optional.of('gcs://oval-cyclist-maven-repo')
+  return java.util.Optional.empty()
 }
 
 def mavenRepo = project.ext.findMavenRepo()
