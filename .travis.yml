@@ -3,6 +3,9 @@ install: true
 jdk:
   - openjdk8
 
+git:
+  depth: false
+
 services:
   - docker
 
@@ -27,6 +30,12 @@ env:
 # output, instead of the default 10.
 # See notes on the CREDZ and REPORT_GCS_BUCKET environment variable in the
 # comments at the top of the file.
-script: chmod 755 ./gradlew && travis_wait 45 ./gradlew build
-
-after_script: git status && git remote -v
+script:
+  - travis_wait 45 ./gradlew build
+  - git status
+  - git remote -v
+  - git branch -a
+  - echo "${TRAVIS_BRANCH}" "${TRAVIS_COMMIT}"
+  - git checkout -qfb commit_under_test
+  - git checkout master
+  - git branch
