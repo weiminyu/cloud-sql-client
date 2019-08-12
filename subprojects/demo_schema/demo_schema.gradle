@@ -7,6 +7,10 @@ buildscript {
   }
 }
 
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import static com.google.common.base.Preconditions.checkState
 
 plugins {
@@ -53,14 +57,16 @@ artifacts {
 publishing {
   repositories {
     maven {
-      url project.hasProperty('maven_repo') ? "$maven_repo" : 'file:///tmp'
+      url project.ext.getPropertyOrDefault('schema_repo', '')
     }
   }
   publications {
     schemaOrmPublication(MavenPublication) {
       groupId 'demoschema'
       artifactId 'demoschema'
-      version '2'
+      version project.getPropertyOrDefault(
+          'schema_version',
+          LocalDate.now().format(DateTimeFormatter.ofPattern('yyyyMMdd')))
 
       from components.java
       artifact schemaJar
