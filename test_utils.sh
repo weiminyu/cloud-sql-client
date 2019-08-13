@@ -8,6 +8,9 @@ SCHEMA_JAR_REPO=https://storage.googleapis.com/oval-cyclist-maven-repo
 SCHEMA_RELEASES=https://storage.googleapis.com/oval-cyclist-maven-repo/nomulus_schema_
 SERVER_RELEASES=https://storage.googleapis.com/oval-cyclist-maven-repo/nomulus_server_
 
+TEST_SCHEMA_REPO="${TRAVIS_BUILD_DIR}/test-schema-maven-repo"
+TEST_SCHEMA_VERSION=travis-test
+
 getDeployedVersion() {
   if [[ $# -ne 1 ]]; then
     echo "getDeployedVersionByEnv requires exactly one parameter: url to file"
@@ -59,26 +62,40 @@ testNewAppWithSchema() {
 
 }
 
+# Test the application at a given commit against the new schema. It ends up in a
+# head detached branch. Caller should clean up.
 testNewSchemaWithAppAtCommit() {
   if [[ $# -ne 1 ]]; then
     echo "testNewSchemaWithAppAtCommit requires exactly one parameter: commit hash on master branch"
     return 1
   fi
+
+  # Checkout the application at the given commit.
+  # This assumes that release is always from master, which may not be correct for cherry-picked
+  # releases.
+  git checkout -qbf master
+  git checkout -qbf $1
+  echo "Testing demo_app with schema at ${TEST_SCHEMA_VERSION}, server at $1"
+  ./gradlew clean :demo_app:test -Pschema_repo=${TEST_SCHEMA_REPO} -Pschema_version=${TEST_SCHEMA_VERSION}
 }
 
 testNewSchemaWithApp() {
+  mkdir -p ${TEST_SCHEMA_REPO}
+  rm -r -f ${TEST_SCHEMA_REPO}/*
+  ./gradlew :demo_schema:publish -Pschema_repo=${TEST_SCHEMA_REPO} -Pschema_version=${TEST_SCHEMA_VERSION}
+
   prodCommit=$(getDeployedVersion "${SERVER_RELEASES}production")
-  [[ $? -ne 0 ]] && echo ${prodCommit} && exit 1
+  [[ $? -eq 0 ]] || (echo ${prodCommit} && exit 1)
 
   if [[ ${prodCommit} != ${TRAVIS_COMMIT} ]]; then
-    testApplicationAtCommit ${prodCommit}
+    testNewSchemaWithAppAtCommit ${prodCommit}
   fi
 
   sandboxCommit=$(getDeployedVersion "${SERVER_RELEASES}sandbox")
-  [[ $? -ne 0 ]] && echo sandboxCommit && exit 1
+  [[ $? -eq 0 ]] || (echo ${sandboxCommit} && exit 1)
 
   if [[ ${sandboxCommit} != ${TRAVIS_COMMIT} && ${sandboxCommit} != ${prodCommit} ]]; then
-    testApplicationAtCommit ${sandboxCommit}
+    testNewSchemaWithAppAtCommit ${sandboxCommit}
   fi
 }
 

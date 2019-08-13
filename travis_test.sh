@@ -19,6 +19,7 @@ schemaChanges=$(countChangesInFolders subprojects/demo_schema)
 
 if [[ ${schemaChanges} -gt 0 ]]; then
   echo "Testing schema changes..."
+  testNewSchemaWithApp
 else
   echo "Testing application changes..."
   testNewAppWithSchema
