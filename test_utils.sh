@@ -95,24 +95,3 @@ testNewSchemaWithApp() {
     testNewSchemaWithAppAtCommit ${sandboxCommit}
   fi
 }
-
-
-
-#badNoEnv=$(getSchemaVersionByEnv)
-#[[ $? -ne 0 ]] && echo ${badNoEnv} && exit 1
-
-#badWrongEnv=$(getSchemaVersionByEnv alpha)
-
-#[[ $? -ne 0 ]] && echo ${badWrongEnv} && exit 1
-
-#prod=$(getSchemaVersionByEnv production)
-
-#echo "production release is $prod"
-
-#sandbox=$(getSchemaVersionByEnv sandbox)
-
-#echo "sandbox release is $sandbox"
-
-# echo $(countChangesInFolders subprojects/demo_app subprojects/demo_schema)
-
-# getDeployedVersion "${SCHEMA_RELEASES}production"

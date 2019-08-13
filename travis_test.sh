@@ -15,16 +15,23 @@ echo "Starting cross-release tests."
 
 source ./test_utils.sh
 
-schemaChanges=$(countChangesInFolders subprojects/demo_schema)
+if [[ ${TRAVIS_BRANCH} == "master" ]]; then
+  # Assuming this is CI test. Perform cross-branch test for
+  # both schema and app. Note that app should be tested first,
+  # since schema test will end up at another commit.
+  echo "Testing application changes..."
+  testNewAppWithSchema
 
-if [[ ${schemaChanges} -gt 0 ]]; then
   echo "Testing schema changes..."
   testNewSchemaWithApp
 else
-  echo "Testing application changes..."
-  testNewAppWithSchema
+  # Assuming this is Presubmit test
+  schemaChanges=$(countChangesInFolders subprojects/demo_schema)
+  if [[ ${schemaChanges} -gt 0 ]]; then
+    echo "Testing schema changes..."
+    testNewSchemaWithApp
+  else
+    echo "Testing application changes..."
+    testNewAppWithSchema
+  fi
 fi
-
-
-
-
