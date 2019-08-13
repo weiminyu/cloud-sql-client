@@ -71,9 +71,6 @@ testNewSchemaWithAppAtCommit() {
   fi
 
   # Checkout the application at the given commit.
-  # This assumes that release is always from master, which may not be correct for cherry-picked
-  # releases.
-  git checkout -qf master
   git checkout -qf $1
   echo "Testing demo_app with schema at ${TEST_SCHEMA_VERSION}, server at $1"
   ./gradlew clean :demo_app:test -Pschema_repo=${TEST_SCHEMA_REPO} -Pschema_version=${TEST_SCHEMA_VERSION}
