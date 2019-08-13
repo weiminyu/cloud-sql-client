@@ -3,6 +3,9 @@ buildscript {
   configurations.classpath {
     resolutionStrategy.activateDependencyLocking()
   }
+  dependencies {
+    classpath 'com.google.guava:guava:26.0-jre'
+  }
 }
 
 plugins {

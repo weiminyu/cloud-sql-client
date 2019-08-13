@@ -1,24 +1,30 @@
-project.ext.findMavenRepo = {
-  if (project.hasProperty('maven_repo')
-      && !project.getProperty('maven_repo').trim().isEmpty()) {
-    return java.util.Optional.of(project.getProperty('maven_repo'))
-  }
-  return java.util.Optional.empty()
+import static com.google.common.base.Preconditions.checkState
+
+import java.util.Optional
+
+ext.findMavenRepo = {
+  return Optional.ofNullable(ext.getPropertyOrDefault('schema_repo', null))
 }
 
-def mavenRepo = project.ext.findMavenRepo()
+def schemaRepo = ext.findMavenRepo()
+
+if (schemaRepo.isPresent()) {
+  checkState(
+      project.hasProperty('schema_version'),
+      'schema_version is required when schema_repo is defined.')
+}
 
 repositories {
-  if (mavenRepo.isPresent()) {
+  if (schemaRepo.isPresent()) {
     maven {
-      url "${mavenRepo.get()}"
+      url "${schemaRepo.get()}"
     }
   }
 }
 
 dependencies {
-  if (mavenRepo.isPresent()) {
-    compile 'demoschema:demoschema:prod:orm'
+  if (schemaRepo.isPresent()) {
+    compile "demoschema:demoschema:${schema_version}:orm"
   } else {
     compile project(':demo_schema')
   }
