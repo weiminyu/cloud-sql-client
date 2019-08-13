@@ -39,7 +39,7 @@ testNewAppWithSchemaWithVersion() {
     return 1
   fi
 
-  echo "Testing app against schema version $1"
+  echo "Testing app change against deployed schema $1"
 
   # Run 'test' instead of build.
   # TODO(weiminyu): group tests that need DB in a dedicated suite
@@ -72,7 +72,7 @@ testNewSchemaWithAppAtCommit() {
 
   # Checkout the application at the given commit.
   git checkout -qf $1
-  echo "Testing demo_app with schema at ${TEST_SCHEMA_VERSION}, server at $1"
+  echo "Testing schema change (published to ${TEST_SCHEMA_REPO}) against server at $1"
   ./gradlew clean :demo_app:test -Pschema_repo=${TEST_SCHEMA_REPO} -Pschema_version=${TEST_SCHEMA_VERSION}
 }
 
