@@ -72,6 +72,7 @@ testNewSchemaWithAppAtCommit() {
 
   # Checkout the application at the given commit.
   git checkout -qf $1
+  git status
   echo "Testing schema change (published to ${TEST_SCHEMA_REPO}) against server at $1"
   ./gradlew clean :demo_app:test -Pschema_repo=${TEST_SCHEMA_REPO} -Pschema_version=${TEST_SCHEMA_VERSION}
 }
