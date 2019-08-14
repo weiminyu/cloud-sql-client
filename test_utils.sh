@@ -21,7 +21,7 @@ getDeployedVersion() {
   echo ${value}
 
   errorCount=$(echo ${value} | grep "Error" | wc -l)
-  [[ ${errorCount} -gt 0 ]] && return 1
+  [[ ${errorCount} -eq 0 ]] || return 1
 }
 
 # Checks if the commit under test consists changes in the given folder(s).
@@ -48,13 +48,13 @@ testNewAppWithSchemaWithVersion() {
 
 testNewAppWithSchema() {
   prodVersion=$(getDeployedVersion "${SCHEMA_RELEASES}production")
-  [[ $? -eq 0 ]] || (echo ${prodVersion} && exit 1)
+  [[ $? -eq 0 ]] || { echo ${prodVersion}; exit 1; }
 
   testNewAppWithSchemaWithVersion ${prodVersion}
-  [[ $? -eq 0 ]] || (echo "Failed against schema version ${prodVersion}" && exit 1)
+  [[ $? -eq 0 ]] || { echo "Failed against schema version ${prodVersion}"; exit 1; }
 
   sandboxVersion=$(getDeployedVersion "${SCHEMA_RELEASES}sandbox")
-  [[ $? -eq 0 ]] || (echo ${sandboxVersion} && exit 1)
+  [[ $? -eq 0 ]] || { echo ${sandboxVersion}; exit 1; }
 
   if [[ ${sandboxVersion} != ${prodVersion} ]]; then
     testNewAppWithSchemaWithVersion ${sandboxVersion}
@@ -74,7 +74,7 @@ testNewSchemaWithAppAtCommit() {
   # Note: we assume that the given commit is on ${TRAVIS_BRANCH}. This may not be true
   # if this is a forked branch that has not been rebased for a long time, or if the commit
   # is for a cherry-picked release that has not been merged back to master.
-  git checkout -qf $1 || (echo "Could not check out the given commit. Aborting." && exit 1)
+  git checkout -qf $1 || { echo "Could not check out the given commit. Aborting."; exit 1; }
   git status
   echo "Testing schema change (published to ${TEST_SCHEMA_REPO}) against server at $1"
   ./gradlew clean :demo_app:test -Pschema_repo=${TEST_SCHEMA_REPO} -Pschema_version=${TEST_SCHEMA_VERSION}
@@ -86,14 +86,14 @@ testNewSchemaWithApp() {
   ./gradlew :demo_schema:publish -Pschema_repo=${TEST_SCHEMA_REPO} -Pschema_version=${TEST_SCHEMA_VERSION}
 
   prodCommit=$(getDeployedVersion "${SERVER_RELEASES}production")
-  [[ $? -eq 0 ]] || (echo ${prodCommit} && exit 1)
+  [[ $? -eq 0 ]] || { echo ${prodCommit};  exit 1; }
 
   if [[ ${prodCommit} != ${TRAVIS_COMMIT} ]]; then
-    testNewSchemaWithAppAtCommit ${prodCommit}
+    testNewSchemaWithAppAtCommit ${prodCommit} || exit 1
   fi
 
   sandboxCommit=$(getDeployedVersion "${SERVER_RELEASES}sandbox")
-  [[ $? -eq 0 ]] || (echo ${sandboxCommit} && exit 1)
+  [[ $? -eq 0 ]] || { echo ${sandboxCommit}; exit 1; }
 
   if [[ ${sandboxCommit} != ${TRAVIS_COMMIT} && ${sandboxCommit} != ${prodCommit} ]]; then
     testNewSchemaWithAppAtCommit ${sandboxCommit}
