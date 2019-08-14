@@ -71,7 +71,10 @@ testNewSchemaWithAppAtCommit() {
   fi
 
   # Checkout the application at the given commit.
-  git checkout -qf $1
+  # Note: we assume that the given commit is on ${TRAVIS_BRANCH}. This may not be true
+  # if this is a forked branch that has not been rebased for a long time, or if the commit
+  # is for a cherry-picked release that has not been merged back to master.
+  git checkout -qf $1 || (echo "Could not check out the given commit. Aborting." && exit 1)
   git status
   echo "Testing schema change (published to ${TEST_SCHEMA_REPO}) against server at $1"
   ./gradlew clean :demo_app:test -Pschema_repo=${TEST_SCHEMA_REPO} -Pschema_version=${TEST_SCHEMA_VERSION}
