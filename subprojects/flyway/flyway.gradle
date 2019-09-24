@@ -45,11 +45,6 @@ dependencies {
     compile project(':demo_schema')
 
     compile 'org.flywaydb:flyway-core:5.2.4'
-
-    runtimeOnly 'org.postgresql:postgresql:42.2.5'
-
-    testCompile 'org.testcontainers:testcontainers:1.10.6'
-    testCompile 'org.testcontainers:postgresql:1.10.6'
 }
 
 tasks

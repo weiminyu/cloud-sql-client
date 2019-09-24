@@ -19,8 +19,6 @@ dependencies {
     compile 'org.liquibase:liquibase-core:3.6.1'
 
     testRuntimeOnly 'org.postgresql:postgresql:42.2.5'
-    testCompile 'org.testcontainers:postgresql:1.10.6'
-    testCompile 'org.testcontainers:testcontainers:1.10.6'
 }
 
 liquibase {

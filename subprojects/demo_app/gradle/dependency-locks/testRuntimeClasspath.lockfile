@@ -30,7 +30,6 @@ org.apache.commons:commons-compress:1.18
 org.checkerframework:checker-compat-qual:2.5.5
 org.codehaus.mojo:animal-sniffer-annotations:1.17
 org.dom4j:dom4j:2.1.1
-org.flywaydb:flyway-core:5.2.4
 org.glassfish.jaxb:jaxb-runtime:2.3.1
 org.glassfish.jaxb:txw2:2.3.1
 org.hamcrest:hamcrest-core:1.3

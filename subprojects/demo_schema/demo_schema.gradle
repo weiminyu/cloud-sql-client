@@ -26,9 +26,6 @@ dependencies {
 
   compile 'org.reflections:reflections:0.9.11'
 
-  testCompile 'org.testcontainers:testcontainers:1.10.6'
-  testCompile 'org.testcontainers:postgresql:1.10.6'
-
   testCompile project(':testutils')
 }
 
