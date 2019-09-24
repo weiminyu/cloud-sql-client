@@ -20,12 +20,12 @@ if [[ ${TRAVIS_BRANCH} == "master" ]]; then
   # both schema and app. Note that app should be tested first,
   # since schema test will end up at another commit.
   echo "Testing application changes..."
-  testNewAppWithSchema
+  testNewAppWithSchema || exit 1
 
   echo "Testing schema changes..."
   testNewSchemaWithApp
 else
-  # Assuming this is Presubmit test
+  # Assuming this is Presubmit test. Only test changed part for faster response.
   schemaChanges=$(countChangesInFolders subprojects/demo_schema)
   if [[ ${schemaChanges} -gt 0 ]]; then
     echo "Testing schema changes..."
